@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="regression" verbose="1" thread-count="2" parallel="classes">
+    <test name="Nopackage">
+        <packages>
+            <package name="org.hrm.base"></package>
+        </packages>
+    </test>
+</suite>
