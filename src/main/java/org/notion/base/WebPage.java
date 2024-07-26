@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class WebPage {
-    public static final int DELAY_TEST_TIME = 5;
+    public static final int DELAY_TEST_TIME = 3;
     protected WebDriver driver;
     protected WebDriverWait wait;
 

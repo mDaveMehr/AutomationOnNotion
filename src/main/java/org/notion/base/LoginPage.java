@@ -1,6 +1,5 @@
 package org.notion.base;
 
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -45,6 +44,16 @@ public class LoginPage extends WebPage{
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
+        }
+    }
+
+    protected void closeAllBrowsers() {
+        try {
+
+            Process process = Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
+            process.waitFor();
+        } catch (Exception e) {
+            System.out.println("Failed to close all Chrome browsers: " + e.getMessage());
         }
     }
 }
