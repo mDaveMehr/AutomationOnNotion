@@ -1,35 +1,59 @@
 package org.notion.base;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class LoginPage {
+public class LoginPage extends WebPage{
+    private static final String HOME_PAGE_TITLE= "Concordia";
+    @FindBy(css = "input#notion-email-input-2")
+    protected WebElement userEmail;
 
-    protected WebDriver driver;
-    protected WebDriverWait wait;
-    public void login() {
-        WebElement email = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("notion-email-input-2")));
-        email.sendKeys("john.mird@gmail.com");
-        WebElement continueBtn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("form > div[role='button']")));
+    @FindBy(css = "form > div[role='button']")
+    protected WebElement continueBtn;
+
+    @FindBy(css = "input#notion-password-input-1")
+    protected WebElement passWrd;
+
+    @FindBy(css = ".notion-sidebar-switcher > div > div:nth-child(2) > div > div > div:first-child")
+    protected WebElement HomePageText;
+
+    public LoginPage(WebDriver driver) {
+        super(driver);
+    }
+
+    protected void login(String email, String password) {
+        waitForElementToBeVisible(userEmail);
+        userEmail.sendKeys(email);
+        delayTest(DELAY_TEST_TIME);
+        waitForElementToBeClickable(continueBtn);
         continueBtn.click();
+        delayTest(DELAY_TEST_TIME);
+        waitForElementToBeVisible(passWrd);
+        passWrd.sendKeys(password);
+        delayTest(DELAY_TEST_TIME);
+        waitForElementToBeClickable(continueBtn);
+        continueBtn.click();
+        delayTest(DELAY_TEST_TIME);
+    }
 
-        WebElement password = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input#notion-password-input-1")));
-        password.sendKeys("123123Aa@");
-        WebElement loginBtn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("form > div[role='button']")));
-        loginBtn.click();
+    protected boolean isUserLoggedIn() {
+        try {
+            String pageTitle = HomePageText.getText();
+            return pageTitle.equalsIgnoreCase(HOME_PAGE_TITLE);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
 
-        WebElement createPageBtn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("svg[class='createPage']")));
-        createPageBtn.click();
+    protected void closeAllBrowsers() {
+        try {
 
-        WebElement pageHeading = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1[class='notranslate']")));
-        pageHeading.sendKeys("Shopping List");
-
-        WebElement pageParagraph = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("svg[class='checkboxSquareChecked']")));
-        pageParagraph.click();
+            Process process = Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
+            process.waitFor();
+        } catch (Exception e) {
+            System.out.println("Failed to close all Chrome browsers: " + e.getMessage());
+        }
     }
 }

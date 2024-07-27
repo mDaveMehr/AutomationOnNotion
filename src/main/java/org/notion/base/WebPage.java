@@ -1,11 +1,14 @@
 package org.notion.base;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
 public class WebPage {
+    public static final int DELAY_TEST_TIME = 3;
     protected WebDriver driver;
     protected WebDriverWait wait;
 
@@ -13,7 +16,20 @@ public class WebPage {
         this.driver = driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
+    public WebElement waitForElementToBeVisible(WebElement element){
+        return wait.until(ExpectedConditions.visibilityOf(element));
+    }
 
+    public WebElement waitForElementToBeClickable(WebElement element){
+        return wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
 
-
+    protected void delayTest(int milliSeconds) {
+        try {
+            Thread.sleep(milliSeconds * 1000);
+        } catch (InterruptedException ex) {
+            System.out.println(ex.getMessage());
+            Thread.currentThread().interrupt();
+        }
+    }
 }

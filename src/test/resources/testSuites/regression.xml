@@ -3,7 +3,7 @@
 <suite name="regression" verbose="1" thread-count="2" parallel="classes">
     <test name="Nopackage">
         <packages>
-            <package name="org.hrm.base"></package>
+            <package name="org.notion.base"></package>
         </packages>
     </test>
 </suite>
