@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class LoginPage extends WebPage{
-    private static final String HOME_PAGE_TITLE= "Concordia";
+    private static final String HOME_PAGE_TITLE= "Library";
     @FindBy(css = "input#notion-email-input-2")
     protected WebElement userEmail;
 
@@ -44,16 +44,6 @@ public class LoginPage extends WebPage{
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
-        }
-    }
-
-    protected void closeAllBrowsers() {
-        try {
-
-            Process process = Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
-            process.waitFor();
-        } catch (Exception e) {
-            System.out.println("Failed to close all Chrome browsers: " + e.getMessage());
         }
     }
 }

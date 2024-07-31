@@ -70,7 +70,7 @@ public class TaskPage extends WebPage {
             }
         }
     }
-    private void clickElement(WebElement element) {
+    protected void clickElement(WebElement element) {
         waitForElementToBeClickable(element).click();
     }
 

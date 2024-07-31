@@ -23,7 +23,9 @@ public class WebPage {
     public WebElement waitForElementToBeClickable(WebElement element){
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
-
+    protected void clickElement(WebElement element) {
+        waitForElementToBeClickable(element).click();
+    }
     protected void delayTest(int milliSeconds) {
         try {
             Thread.sleep(milliSeconds * 1000);
