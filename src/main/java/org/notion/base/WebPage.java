@@ -6,6 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class WebPage {
     public static final int DELAY_TEST_TIME = 3;
@@ -33,5 +34,8 @@ public class WebPage {
             System.out.println(ex.getMessage());
             Thread.currentThread().interrupt();
         }
+    }
+    public void waitForElementListToBeVisible(List<WebElement> webElements){
+         wait.until(ExpectedConditions.visibilityOfAllElements(webElements));
     }
 }
