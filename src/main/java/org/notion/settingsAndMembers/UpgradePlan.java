@@ -29,7 +29,7 @@ public class UpgradePlan extends WebPage {
     protected WebElement addToPlanButton;
 
     @FindBy(css ="div.StripeElement > div > iframe")
-    protected WebElement switchToIframe;
+    protected WebElement switchToPaymentIframe;
 
     @FindBy(css = "div.p-Input > input[name='number']")
     protected WebElement enterCardNumber;
@@ -54,7 +54,6 @@ public class UpgradePlan extends WebPage {
 
     @FindBy(css = "p#Field-postalCodeError")
     protected WebElement getPostalCodeErrorMsg;
-
 
     @FindBy(css = "div.autolayout-row.autolayout-fill-width.autolayout-center-left > span")
     protected List<WebElement> selectMonthlyBillingOption;
@@ -97,17 +96,17 @@ public class UpgradePlan extends WebPage {
 
     protected void enterPaymentDetails() {
         try {
-            waitForElementToBeVisible(switchToIframe);
-            driver.switchTo().frame(switchToIframe);
+            waitForElementToBeVisible(switchToPaymentIframe);
+            driver.switchTo().frame(switchToPaymentIframe);
 
             enterCardNumberField();
-            delayTest(DELAY_TEST_TIME);
+            pauseBrowser(DELAY_TEST_TIME);
             enterExpirationDateField();
-            delayTest(DELAY_TEST_TIME);
+            pauseBrowser(DELAY_TEST_TIME);
             enterSecurityCodeField();
-            delayTest(DELAY_TEST_TIME);
+            pauseBrowser(DELAY_TEST_TIME);
             enterPostalCodeField();
-            delayTest(DELAY_TEST_TIME);
+            pauseBrowser(DELAY_TEST_TIME);
             // Handle Phone Number if present
             if (isElementPresent(enterPhoneNumber)) {
                 String phoneNumber = generateRandomPhoneNumber();
@@ -217,11 +216,12 @@ public class UpgradePlan extends WebPage {
         return result.toString();
     }
     protected static String generateRandomPhoneNumber(){
-        long phoneNumber = 1000000000L + (long) (random.nextDouble() * 9000000000L);
-        return String.format("(%03d) %03d-%04d",
-                (int) (phoneNumber / 10000000),
-                (int) ((phoneNumber / 10000) % 1000),
-                (int) (phoneNumber % 10000));
+        int areaCode = random.nextInt(1000);         // Area code: 000 to 999
+        int centralOfficeCode = random.nextInt(1000); // Central office code: 000 to 999
+        int lineNumber = random.nextInt(10000);      // Line number: 0000 to 9999
+
+        // Format and return the phone number - (XXX) XXX-XXXX
+        return String.format("(%03d) %03d-%04d", areaCode, centralOfficeCode, lineNumber);
     }
     protected void chooseBillingOption(){
         driver.switchTo().defaultContent();

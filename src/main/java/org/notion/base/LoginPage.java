@@ -25,16 +25,16 @@ public class LoginPage extends WebPage{
     protected void login(String email, String password) {
         waitForElementToBeVisible(userEmail);
         userEmail.sendKeys(email);
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         waitForElementToBeClickable(continueBtn);
         continueBtn.click();
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         waitForElementToBeVisible(passWrd);
         passWrd.sendKeys(password);
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         waitForElementToBeClickable(continueBtn);
         continueBtn.click();
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
     }
 
     protected boolean isUserLoggedIn() {

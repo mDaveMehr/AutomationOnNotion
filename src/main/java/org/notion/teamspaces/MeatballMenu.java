@@ -127,30 +127,30 @@ public class MeatballMenu extends WebPage {
    protected void duplicateWithContent(){
        waitForElementToBeVisible(duplicateElementLink);
        clickElement(duplicateElementLink);
-       delayTest(DELAY_TEST_TIME);
+       pauseBrowser(DELAY_TEST_TIME);
        duplicateWithContentMenu.click();
-       delayTest(DELAY_TEST_TIME);
+       pauseBrowser(DELAY_TEST_TIME);
        duplicateTasksOnlyButton.click();
-       delayTest(DELAY_TEST_TIME);
+       pauseBrowser(DELAY_TEST_TIME);
    }
     protected void duplicateWithoutContent(){
         waitForElementToBeVisible(duplicateElementLink);
         clickElement(duplicateElementLink);
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         duplicateWithoutContentMenu.click();
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         duplicateTasksOnlyButton.click();
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
     }
 
     protected void teamspaceListTo(){
         for(int i = 0; i < teamspacesListElements.size(); i++){
             if(teamspacesListElements.get(i).getText().equals("Tasks (1)")){
-                delayTest(DELAY_TEST_TIME);
+                pauseBrowser(DELAY_TEST_TIME);
                 clickElement(teamspacesListElements.get(i));
-                delayTest(DELAY_TEST_TIME);
+                pauseBrowser(DELAY_TEST_TIME);
                 openMenu();
-                delayTest(DELAY_TEST_TIME);
+                pauseBrowser(DELAY_TEST_TIME);
             }
         }
     }
