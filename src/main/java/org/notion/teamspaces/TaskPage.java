@@ -43,19 +43,19 @@ public class TaskPage extends WebPage {
 
     public void taskCreation(){
         clickElement(taskLink);
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         clickElement(createNewTaskBtn);
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         clearAndType(taskInputField,"Retrospective");
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         clickElement(assigneeInputTextField);
 
         assigneeInputField.sendKeys("John Mird");
         Actions action = new Actions(driver);
         action.moveToElement(selectedOptionFromAssigneeList);
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         action.click().perform();
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         WebElement body = driver.findElement(By.tagName("body"));
         action.moveToElement(body).click().perform();
         statusBtn.click();

@@ -27,7 +27,7 @@ public class WebPage {
     protected void clickElement(WebElement element) {
         waitForElementToBeClickable(element).click();
     }
-    protected void delayTest(int milliSeconds) {
+    protected void pauseBrowser(int milliSeconds) {
         try {
             Thread.sleep(milliSeconds * 1000);
         } catch (InterruptedException ex) {
