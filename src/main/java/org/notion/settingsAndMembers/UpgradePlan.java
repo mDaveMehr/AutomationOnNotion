@@ -2,6 +2,8 @@ package org.notion.settingsAndMembers;
 
 import com.github.javafaker.Faker;
 import org.notion.base.WebPage;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,13 +11,14 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 import java.util.Random;
 
-public class SettingsAndMembers extends WebPage {
+public class UpgradePlan extends WebPage {
     private static Faker faker  = new Faker();
     private static final Random random = new Random();
-    private static final String LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String LETTERS = "ABCEGHJKLMNPRSTVWXYZ";
     private static final String DIGITS = "0123456789";
     private static final int BILLING_OPTION = 0;
     private static final int TOTAL_PAYMENT = 2;
+
     @FindBy(css = "div.notion-sidebar > div:nth-child(3) > div > div:nth-child(2) > div[role='button']:last-child")
     protected WebElement settingAndMemberLink;
 
@@ -37,11 +40,21 @@ public class SettingsAndMembers extends WebPage {
     @FindBy(css = "input#Field-expiryInput")
     protected WebElement enterExpirationDate;
 
+    @FindBy(css = "p#Field-expiryError")
+    protected WebElement getExpirationDateErrorMsg;
+
     @FindBy(css = "input#Field-cvcInput")
     protected WebElement enterSecurityCode;
 
+    @FindBy(css = "p#Field-cvcError")
+    protected WebElement getSecurityCodeErrorMsg;
+
     @FindBy(css = "input#Field-postalCodeInput")
     protected WebElement enterPostalCode;
+
+    @FindBy(css = "p#Field-postalCodeError")
+    protected WebElement getPostalCodeErrorMsg;
+
 
     @FindBy(css = "div.autolayout-row.autolayout-fill-width.autolayout-center-left > span")
     protected List<WebElement> selectMonthlyBillingOption;
@@ -58,7 +71,7 @@ public class SettingsAndMembers extends WebPage {
     @FindBy(css = "div.tx-heading-17-semi:last-child")
     protected List<WebElement> totalPayment;
 
-    public SettingsAndMembers(WebDriver driver) {
+    public UpgradePlan(WebDriver driver) {
         super(driver);
     }
 
@@ -82,28 +95,99 @@ public class SettingsAndMembers extends WebPage {
         return addToPlanButton.isDisplayed();
     }
 
-    protected void enterPaymentDetails(){
-        waitForElementToBeVisible(switchToIframe);
-        driver.switchTo().frame(switchToIframe);
+    protected void enterPaymentDetails() {
+        try {
+            waitForElementToBeVisible(switchToIframe);
+            driver.switchTo().frame(switchToIframe);
 
+            enterCardNumberField();
+            delayTest(DELAY_TEST_TIME);
+            enterExpirationDateField();
+            delayTest(DELAY_TEST_TIME);
+            enterSecurityCodeField();
+            delayTest(DELAY_TEST_TIME);
+            enterPostalCodeField();
+            delayTest(DELAY_TEST_TIME);
+            // Handle Phone Number if present
+            if (isElementPresent(enterPhoneNumber)) {
+                String phoneNumber = generateRandomPhoneNumber();
+                enterPhoneNumber.sendKeys(phoneNumber);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void enterCardNumberField() {
         String cardNumber = generateCardNumber();
         waitForElementToBeVisible(enterCardNumber);
+        enterCardNumber.clear();
         enterCardNumber.sendKeys(cardNumber);
 
+        // Check for card number error message
+        if (isElementPresent(getCardNumberErrorMsg)) {
+            String errorMessage = getCardNumberErrorMsg.getText();
+            if (errorMessage.equals("Your card number is invalid.")) {
+                System.out.println("Card number was invalid. Re-entering a new card number.");
+                enterCardNumber.clear(); // Clear the existing input if needed
+                cardNumber = generateCardNumber(); // Generate a new card number
+                enterCardNumber.sendKeys(cardNumber);
+            }
+        }
+    }
+
+    private void enterExpirationDateField() {
         String cardExpirationDate = generateExpirationDate();
         waitForElementToBeVisible(enterExpirationDate);
+        enterExpirationDate.clear();
         enterExpirationDate.sendKeys(cardExpirationDate);
 
+        // Check for expiration date error message
+        if (isElementPresent(getExpirationDateErrorMsg)) {
+            String errorMessage = getExpirationDateErrorMsg.getText();
+            if (errorMessage.equals("Your card's expiration date is incomplete.")) {
+                System.out.println("Expiration date was incomplete. Re-entering a new expiration date.");
+                enterExpirationDate.clear(); // Clear the existing input if needed
+                cardExpirationDate = generateExpirationDate(); // Generate a new expiration date
+                enterExpirationDate.sendKeys(cardExpirationDate);
+            }
+        }
+    }
+
+    private void enterSecurityCodeField() {
         String cardSecurityCode = generateSecurityCode();
         waitForElementToBeVisible(enterSecurityCode);
+        enterSecurityCode.clear();
         enterSecurityCode.sendKeys(cardSecurityCode);
 
+        // Check for security code error message
+        if (isElementPresent(getSecurityCodeErrorMsg)) {
+            String errorMessage = getSecurityCodeErrorMsg.getText();
+            if (errorMessage.equals("Your card's security code is incomplete.")) {
+                System.out.println("Security code was incomplete. Re-entering a new security code.");
+                enterSecurityCode.clear(); // Clear the existing input if needed
+                cardSecurityCode = generateSecurityCode(); // Generate a new security code
+                enterSecurityCode.sendKeys(cardSecurityCode);
+            }
+        }
+    }
+
+    private void enterPostalCodeField() {
         String areaPostalCode = generatePostalCode();
         waitForElementToBeVisible(enterPostalCode);
+        enterPostalCode.clear();
         enterPostalCode.sendKeys(areaPostalCode);
-        if(isElementPresent(enterPhoneNumber)){
-            String phoneNumber = generateRandomPhoneNumber();
-            enterPhoneNumber.sendKeys(phoneNumber);
+
+        // Check for postal code error message
+        if (isElementPresent(getPostalCodeErrorMsg)) {
+            String errorMessage = getPostalCodeErrorMsg.getText();
+            if (errorMessage.equals("Your postal code is invalid.")) {
+                System.out.println("Postal code was invalid. Re-entering a new postal code.");
+                enterPostalCode.clear(); // Clear the existing input if needed
+                areaPostalCode = generatePostalCode(); // Generate a new postal code
+                enterPostalCode.sendKeys(areaPostalCode);
+            }
         }
     }
 
@@ -142,24 +226,24 @@ public class SettingsAndMembers extends WebPage {
     protected void chooseBillingOption(){
         driver.switchTo().defaultContent();
         for(int i = 0; i < selectMonthlyBillingOption.size(); i++){
-            delayTest(DELAY_TEST_TIME);
-            clickElement(selectMonthlyBillingOption.get(0));
+            clickElement(selectMonthlyBillingOption.get(BILLING_OPTION));
         }
-        clickElement(upgradeNowButton);
     }
     private boolean isElementPresent(WebElement element) {
         try {
-            waitForElementToBeVisible(element);
-            return true;
-        } catch (Exception e) {
+            return element.isDisplayed();
+        } catch (NoSuchElementException | StaleElementReferenceException e) {
             return false;
         }
     }
     protected String getBillingOption(){
-        return billingOptionPayment.get(BILLING_OPTION).getText();
+        String monthlyString = billingOptionPayment.get(BILLING_OPTION)
+                .getText().replace(" / member", "");
+        return monthlyString;
     }
     protected String getSummarizedPayment(){
-        return totalPayment.get(TOTAL_PAYMENT).getText() + " / member";
+        driver.switchTo().defaultContent();
+        waitForElementListToBeVisible(totalPayment);
+        return totalPayment.get(TOTAL_PAYMENT).getText();
     }
-
 }

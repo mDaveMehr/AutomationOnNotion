@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class LoginPage extends WebPage{
-    private static final String HOME_PAGE_TITLE= "Library";
+    private static final String HOME_PAGE_TITLE= "Concordia";
     @FindBy(css = "input#notion-email-input-2")
     protected WebElement userEmail;
 

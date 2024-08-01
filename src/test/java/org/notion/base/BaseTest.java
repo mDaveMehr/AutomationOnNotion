@@ -64,4 +64,8 @@ public class BaseTest {
             System.err.println("Failed to terminate existing Chrome processes: " + e.getMessage());
         }
     }
+    @AfterClass
+    public void tearDownClass() {
+        driver.quit();
+    }
 }
