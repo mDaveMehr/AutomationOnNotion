@@ -70,6 +70,9 @@ public class UpgradePlan extends WebPage {
     @FindBy(css = "div.tx-heading-17-semi:last-child")
     protected List<WebElement> totalPayment;
 
+    @FindBy(css = "svg.closeSmall")
+    protected WebElement closeButton;
+
     public UpgradePlan(WebDriver driver) {
         super(driver);
     }
@@ -101,12 +104,50 @@ public class UpgradePlan extends WebPage {
 
             enterCardNumberField();
             pauseBrowser(DELAY_TEST_TIME);
+            // Check for card number error message
+            if (isElementPresent(getCardNumberErrorMsg)) {
+                String errorMessage = getCardNumberErrorMsg.getText();
+                if (errorMessage.equals("Your card number is invalid.")) {
+                    System.out.println("Card number was invalid. Re-entering a new card number.");
+                    enterCardNumber.clear(); // Clear the existing input if needed
+                    enterCardNumberField();
+                }
+            }
             enterExpirationDateField();
             pauseBrowser(DELAY_TEST_TIME);
+            // Check for expiration date error message
+            if (isElementPresent(getExpirationDateErrorMsg)) {
+                String errorMessage = getExpirationDateErrorMsg.getText();
+                if (errorMessage.equals("Your card's expiration date is incomplete.")) {
+                    System.out.println("Expiration date was incomplete. Re-entering a new expiration date.");
+                    enterExpirationDate.clear(); // Clear the existing input if needed
+                    enterExpirationDateField();
+                }
+            }
             enterSecurityCodeField();
             pauseBrowser(DELAY_TEST_TIME);
+
+            // Check for security code error message
+            if (isElementPresent(getSecurityCodeErrorMsg)) {
+                String errorMessage = getSecurityCodeErrorMsg.getText();
+                if (errorMessage.equals("Your card's security code is incomplete.")) {
+                    System.out.println("Security code was incomplete. Re-entering a new security code.");
+                    enterSecurityCode.clear(); // Clear the existing input if needed
+                    enterSecurityCodeField();
+                }
+            }
             enterPostalCodeField();
             pauseBrowser(DELAY_TEST_TIME);
+
+            // Check for postal code error message
+            if (isElementPresent(getPostalCodeErrorMsg)) {
+                String errorMessage = getPostalCodeErrorMsg.getText();
+                if (errorMessage.equals("Your postal code is invalid.")) {
+                    System.out.println("Postal code was invalid. Re-entering a new postal code.");
+                    enterPostalCode.clear(); // Clear the existing input if needed
+                    enterPostalCodeField();
+                }
+            }
             // Handle Phone Number if present
             if (isElementPresent(enterPhoneNumber)) {
                 String phoneNumber = generateRandomPhoneNumber();
@@ -123,17 +164,6 @@ public class UpgradePlan extends WebPage {
         waitForElementToBeVisible(enterCardNumber);
         enterCardNumber.clear();
         enterCardNumber.sendKeys(cardNumber);
-
-        // Check for card number error message
-        if (isElementPresent(getCardNumberErrorMsg)) {
-            String errorMessage = getCardNumberErrorMsg.getText();
-            if (errorMessage.equals("Your card number is invalid.")) {
-                System.out.println("Card number was invalid. Re-entering a new card number.");
-                enterCardNumber.clear(); // Clear the existing input if needed
-                cardNumber = generateCardNumber(); // Generate a new card number
-                enterCardNumber.sendKeys(cardNumber);
-            }
-        }
     }
 
     private void enterExpirationDateField() {
@@ -141,17 +171,6 @@ public class UpgradePlan extends WebPage {
         waitForElementToBeVisible(enterExpirationDate);
         enterExpirationDate.clear();
         enterExpirationDate.sendKeys(cardExpirationDate);
-
-        // Check for expiration date error message
-        if (isElementPresent(getExpirationDateErrorMsg)) {
-            String errorMessage = getExpirationDateErrorMsg.getText();
-            if (errorMessage.equals("Your card's expiration date is incomplete.")) {
-                System.out.println("Expiration date was incomplete. Re-entering a new expiration date.");
-                enterExpirationDate.clear(); // Clear the existing input if needed
-                cardExpirationDate = generateExpirationDate(); // Generate a new expiration date
-                enterExpirationDate.sendKeys(cardExpirationDate);
-            }
-        }
     }
 
     private void enterSecurityCodeField() {
@@ -159,17 +178,6 @@ public class UpgradePlan extends WebPage {
         waitForElementToBeVisible(enterSecurityCode);
         enterSecurityCode.clear();
         enterSecurityCode.sendKeys(cardSecurityCode);
-
-        // Check for security code error message
-        if (isElementPresent(getSecurityCodeErrorMsg)) {
-            String errorMessage = getSecurityCodeErrorMsg.getText();
-            if (errorMessage.equals("Your card's security code is incomplete.")) {
-                System.out.println("Security code was incomplete. Re-entering a new security code.");
-                enterSecurityCode.clear(); // Clear the existing input if needed
-                cardSecurityCode = generateSecurityCode(); // Generate a new security code
-                enterSecurityCode.sendKeys(cardSecurityCode);
-            }
-        }
     }
 
     private void enterPostalCodeField() {
@@ -177,17 +185,6 @@ public class UpgradePlan extends WebPage {
         waitForElementToBeVisible(enterPostalCode);
         enterPostalCode.clear();
         enterPostalCode.sendKeys(areaPostalCode);
-
-        // Check for postal code error message
-        if (isElementPresent(getPostalCodeErrorMsg)) {
-            String errorMessage = getPostalCodeErrorMsg.getText();
-            if (errorMessage.equals("Your postal code is invalid.")) {
-                System.out.println("Postal code was invalid. Re-entering a new postal code.");
-                enterPostalCode.clear(); // Clear the existing input if needed
-                areaPostalCode = generatePostalCode(); // Generate a new postal code
-                enterPostalCode.sendKeys(areaPostalCode);
-            }
-        }
     }
 
     protected static String generateCardNumber(){
@@ -196,7 +193,7 @@ public class UpgradePlan extends WebPage {
 
     protected static String generateExpirationDate(){
         String month = String.format("%02d",random.nextInt(12) + 1);
-        String year = String.format("%02d",random.nextInt(10) + 24);
+        String year = String.format("%02d",random.nextInt(10) + 25);
         return month + "/" + year;
     }
     protected static String generateSecurityCode(){
@@ -245,5 +242,9 @@ public class UpgradePlan extends WebPage {
         driver.switchTo().defaultContent();
         waitForElementListToBeVisible(totalPayment);
         return totalPayment.get(TOTAL_PAYMENT).getText();
+    }
+
+    protected void closePopup(){
+        clickElement(closeButton);
     }
 }

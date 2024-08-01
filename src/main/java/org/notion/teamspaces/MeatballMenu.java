@@ -69,7 +69,7 @@ public class MeatballMenu extends WebPage {
 
     protected void openMenu(){
         clickElement(taskLink);
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         clickElement(meatballMenuBtn);
     }
 
@@ -98,13 +98,13 @@ public class MeatballMenu extends WebPage {
     protected void moveToLink(){
         waitForElementToBeVisible(moveToElementLink);
         moveToElementLink.click();
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         privatePageLocationOption.click();
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         moveToPrivateBtn.click();
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
         moveTasksOnlyButton.click();
-        delayTest(DELAY_TEST_TIME);
+        pauseBrowser(DELAY_TEST_TIME);
     }
 
     private boolean isTextPresentInList(List<WebElement> elements, String text) {
