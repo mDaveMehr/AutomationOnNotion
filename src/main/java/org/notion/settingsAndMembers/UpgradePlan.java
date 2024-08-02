@@ -73,6 +73,18 @@ public class UpgradePlan extends WebPage {
     @FindBy(css = "svg.closeSmall")
     protected WebElement closeButton;
 
+    @FindBy(css = "div[data-testid='plus-upgrade-button']")
+    protected WebElement getUpgradePlusButton;
+
+    @FindBy(css = "div[data-testid='business-upgrade-button']")
+    protected WebElement getUpgradeBusinessButton;
+
+    @FindBy(css = "div[data-testid='enterprise-upgrade-button']")
+    protected WebElement getUpgradeEnterpriseButton;
+
+    @FindBy(css ="span.pseudoActive:last-child")
+    protected WebElement getAddOnsButton;
+
     public UpgradePlan(WebDriver driver) {
         super(driver);
     }
@@ -89,13 +101,6 @@ public class UpgradePlan extends WebPage {
         clickElement(addToPlanButton);
     }
 
-    protected boolean isUpgradePlanButtonVisible() {
-        return upgradePlanButton.isDisplayed();
-    }
-
-    protected boolean isAddToPlanButtonVisible() {
-        return addToPlanButton.isDisplayed();
-    }
 
     protected void enterPaymentDetails() {
         try {
@@ -220,11 +225,13 @@ public class UpgradePlan extends WebPage {
         // Format and return the phone number - (XXX) XXX-XXXX
         return String.format("(%03d) %03d-%04d", areaCode, centralOfficeCode, lineNumber);
     }
-    protected void chooseBillingOption(){
+    protected void chooseBillingOption(int index){
         driver.switchTo().defaultContent();
-        for(int i = 0; i < selectMonthlyBillingOption.size(); i++){
-            clickElement(selectMonthlyBillingOption.get(BILLING_OPTION));
-        }
+       if(index >= 0 && index < selectMonthlyBillingOption.size()){
+            clickElement(selectMonthlyBillingOption.get(index));
+        }else {
+           throw new IndexOutOfBoundsException("Index " + index + " is out of bounds.");
+       }
     }
     private boolean isElementPresent(WebElement element) {
         try {
@@ -233,11 +240,7 @@ public class UpgradePlan extends WebPage {
             return false;
         }
     }
-    protected String getBillingOption(){
-        String monthlyString = billingOptionPayment.get(BILLING_OPTION)
-                .getText().replace(" / member", "");
-        return monthlyString;
-    }
+
     protected String getSummarizedPayment(){
         driver.switchTo().defaultContent();
         waitForElementListToBeVisible(totalPayment);
@@ -245,6 +248,24 @@ public class UpgradePlan extends WebPage {
     }
 
     protected void closePopup(){
+        pauseBrowser(DELAY_TEST_TIME);
         clickElement(closeButton);
     }
+
+    protected void subscribeToPlusPlan(){
+        clickElement(getUpgradePlusButton);
+    }
+    protected void subscribeToBusinessPlan(){
+        clickElement(getUpgradeBusinessButton);
+    }
+
+    protected void subscribeToEnterprisePlan(){
+        clickElement(getUpgradeEnterpriseButton);
+    }
+
+    protected void additionalAddOn(){
+        pauseBrowser(DELAY_TEST_TIME);
+        clickElement(getAddOnsButton);
+    }
+
 }
