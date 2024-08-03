@@ -193,15 +193,18 @@ public class UpgradePlan extends WebPage {
     }
 
     protected static String generateCardNumber(){
+        System.out.println(faker.finance().creditCard());
         return faker.finance().creditCard();
     }
 
     protected static String generateExpirationDate(){
         String month = String.format("%02d",random.nextInt(12) + 1);
         String year = String.format("%02d",random.nextInt(10) + 25);
+        System.out.println(month + "/" + year);
         return month + "/" + year;
     }
     protected static String generateSecurityCode(){
+        System.out.println(String.format("%03d",random.nextInt(900) + 100));
         return String.format("%03d",random.nextInt(900) + 100);
     }
     protected static String generatePostalCode(){
@@ -218,7 +221,9 @@ public class UpgradePlan extends WebPage {
         return result.toString();
     }
     protected static String generateRandomPhoneNumber(){
-        int areaCode = random.nextInt(1000);         // Area code: 000 to 999
+        int minAreaCode = 400;
+        int maxAreaCode = 999;
+        int areaCode = random.nextInt(maxAreaCode - minAreaCode + 1) + minAreaCode;         // Area code: 000 to 999
         int centralOfficeCode = random.nextInt(1000); // Central office code: 000 to 999
         int lineNumber = random.nextInt(10000);      // Line number: 0000 to 9999
 
@@ -232,6 +237,7 @@ public class UpgradePlan extends WebPage {
         }else {
            throw new IndexOutOfBoundsException("Index " + index + " is out of bounds.");
        }
+        clickElement(upgradeNowButton);
     }
     private boolean isElementPresent(WebElement element) {
         try {
