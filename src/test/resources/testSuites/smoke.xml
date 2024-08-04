@@ -3,7 +3,7 @@
 <suite name="regression" verbose="1" thread-count="1" parallel="classes">
     <test name="Nopackage">
         <classes>
-            <class name="org.notion.settingsAndMembers.UpgradePlanTest"></class>
+            <class name="org.notion.settingsAndMembers.workspace.UpgradePlanTest"></class>
         </classes>
     </test>
 

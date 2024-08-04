@@ -1,4 +1,4 @@
-package org.notion.settingsAndMembers;
+package org.notion.settingsAndMembers.workspace;
 
 import com.github.javafaker.Faker;
 import org.notion.base.WebPage;
@@ -16,7 +16,6 @@ public class UpgradePlan extends WebPage {
     private static final Random random = new Random();
     private static final String LETTERS = "ABCEGHJKLMNPRSTVWXYZ";
     private static final String DIGITS = "0123456789";
-    private static final int BILLING_OPTION = 0;
     private static final int TOTAL_PAYMENT = 2;
 
     @FindBy(css = "div.notion-sidebar > div:nth-child(3) > div > div:nth-child(2) > div[role='button']:last-child")
@@ -61,12 +60,6 @@ public class UpgradePlan extends WebPage {
     @FindBy(css = "input#Field-linkMobilePhoneInput")
     protected WebElement enterPhoneNumber;
 
-    @FindBy(css = "div.autolayout-col.autolayout-fill-width > div:first-child > div[role='button']:first-child")
-    protected WebElement upgradeNowButton;
-
-    @FindBy(css = "div.autolayout-col.autolayout-fill-width > div > div.tx-caption-12-reg")
-    protected List<WebElement> billingOptionPayment;
-
     @FindBy(css = "div.tx-heading-17-semi:last-child")
     protected List<WebElement> totalPayment;
 
@@ -100,7 +93,6 @@ public class UpgradePlan extends WebPage {
         waitForElementToBeVisible(addToPlanButton);
         clickElement(addToPlanButton);
     }
-
 
     protected void enterPaymentDetails() {
         try {
@@ -237,7 +229,6 @@ public class UpgradePlan extends WebPage {
         }else {
            throw new IndexOutOfBoundsException("Index " + index + " is out of bounds.");
        }
-        clickElement(upgradeNowButton);
     }
     private boolean isElementPresent(WebElement element) {
         try {
