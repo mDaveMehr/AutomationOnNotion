@@ -1,4 +1,4 @@
-package org.notion.settingsAndMembers;
+package org.notion.settingsAndMembers.workspace;
 
 import org.notion.base.BaseTest;
 import org.openqa.selenium.support.PageFactory;
